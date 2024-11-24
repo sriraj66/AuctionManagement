@@ -1,0 +1,44 @@
+<hr>
+
+{% if teams %}
+<h5><strong>Teams</strong></h5>
+<table id="teamTable" class="table" style="width:100%">
+    <thead>
+        <tr>
+            <th>Logo</th>
+            <th>Team Name</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in teams %}
+        <tr>
+            <td><img src="{{i.team_logo.url}}" alt="" width="50px" class="rounded-circle"></td>
+            <td>{{i.team_name}}</td>
+            <td class="text-danger">
+                <button 
+                    hx-swap="innerHTML" 
+                    hx-target="#team_table_wraper" 
+                    hx-post="{% url 'delete_team' auction.id i.id %}" 
+                    class="btn btn-flat"
+                    hx-confirm="Are you sure to delete this team?" >
+                    <i class="fa fa-trash"></i> Delete
+                </button>
+            </td>    
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p><strong>No Teams Created</strong></p>
+{% endif %}
+
+
+<!-- Scripts -->
+{% block script %}
+<script>
+    new DataTable("#teamTable", {
+        "ordering": false
+    })
+</script>
+{% endblock %}

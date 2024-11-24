@@ -1,0 +1,451 @@
+{% extends '_.html' %}
+
+{% block title %}
+Manage Team
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+
+
+{% block main %}
+
+<div class="card">
+    <div class="card-header text-center">
+        Manage Teams
+    </div>
+
+    <div class="card-body">
+        <div class="btn-group w-100">
+            <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#modalTeamForm"><i
+                    class="ri-pencil-line"></i>Create Team</button>
+            <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#modalPlayerForm"><i
+                    class="ri-pencil-line"></i>Create Player</button>
+            <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#modalExelUpload"><i
+                    class="ri-pencil-line"></i>Others</button>
+
+        </div>
+
+        <div class="col-12 mt-3">
+            <a class="w-100 btn btn-primary" href="{% url 'dashboard' auction.id %}">View Dashboard</a>
+        </div>
+    </div>
+    <div class="card-body d-flex justify-content-center align-items-center">
+
+
+
+    </div>
+    <div class="card-body d-flex justify-content-center align-items-center">
+
+        <div class=" col-lg-10 col-12" id="team_table_wraper">
+            {% include "root/partials/team_table.html" %}
+        </div>
+    </div>
+
+    <!-- Players -->
+
+    <div class="row row-cols-1 d-flex justify-content-center align-items-center">
+        <div class=" col-lg-10 col-12" id="player_table_wraper">
+            {% include "root/partials/player_table.html" %}
+        </div>
+    </div>
+    <br>
+
+</div>
+
+
+
+<!-- Modals -->
+
+<!-- Team Form -->
+<div class="modal fade" id="modalTeamForm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Team</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form enctype="multipart/form-data" class="col-12" hx-post="{% url 'create_team' auction.id %}"
+                    hx-swap="innerHTML" hx-target="#team_table_wraper" hx-on::after-request="this.reset()">
+                    {% csrf_token %}
+                    <div class="form-floating mb-3">
+
+                        <input type="text" name="team_name" required class="form-control" id="tname" placeholder="">
+                        <label for="tname">Team Name</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="short_name" required id="sname"
+                                    placeholder="">
+                                <label for="sname">Short Name</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="owner_name" required id="oname"
+                                    placeholder="">
+                                <label for="oname">Owner Name</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="logo" class="form-label">Team Logo</label>
+                        <div class="row">
+                            <div class="col-12">
+                                <input class="form-control" id="logo" required name="logo" type="file" accept="image/*">
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="btn-group w-100">
+                        <input class="btn btn-success" data-bs-dismiss="modal" type="submit" value="Add" />
+                        <button class="btn btn-danger" data-bs-dismiss="modal" type="reset">Close</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Players Form -->
+<div class="modal fade modal-xl" id="modalPlayerForm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Player</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="col-12" hx-swap="innerHTML" hx-target="#player_table_wraper"
+                    hx-on::after-request="this.reset()" hx-post="{% url 'create_player' auction.id %}">
+                    {% csrf_token %}
+
+                    <!-- Player Name -->
+                    <div class="form-floating mb-3">
+                        <input type="text" name="player_name" required class="form-control" id="player_name"
+                            placeholder="">
+                        <label for="player_name">Player Name</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select name="player_category" class="form-select" id="player_category">
+                            {% for i in categories %}
+                            <option value="{{i.id}}">{{i.name}}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="player_category">Player Category</label>
+                    </div>
+                    <!-- Player Image -->
+                    <div class="mb-3 mt-3">
+                        <label for="player_image" class="form-label">Profile Image URL</label>
+                        <div class="row">
+                            <div class="col-10 col-lg-11">
+                                <input class="form-control" id="player_image" name="player_image" type="url"
+                                    placeholder="Image URL" required>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- MPL ID -->
+                    <div class="form-floating mb-3">
+                        <input type="text" name="mpl_id" class="form-control" id="mpl_id" placeholder="">
+                        <label for="mpl_id">MPL ID</label>
+                    </div>
+
+                    <!-- Player Age -->
+                    <div class="form-floating mb-3">
+                        <input type="number" name="player_age" required class="form-control" id="player_age"
+                            placeholder="">
+                        <label for="player_age">Age</label>
+                    </div>
+
+                    <!-- Village Name -->
+                    <div class="form-floating mb-3">
+                        <input type="text" name="player_village" class="form-control" id="player_village"
+                            placeholder="">
+                        <label for="player_village">Village Name</label>
+                    </div>
+
+                    <!-- Player Role -->
+                    <div class="form-floating mb-3">
+                        <input type="text" name="player_role" required class="form-control" id="player_role"
+                            placeholder="">
+                        <label for="player_role">Player Role</label>
+                    </div>
+
+                    <!-- Player Total Matches -->
+                    <div class="form-floating mb-3">
+                        <input type="number" name="player_matches" required class="form-control" id="player_matches"
+                            placeholder="">
+                        <label for="player_matches">Total Matches</label>
+                    </div>
+
+
+
+                    <!-- Batting and Bowling Stats -->
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <div class="form-floating">
+                                <input type="number" class="form-control" name="player_bat_matches" required
+                                    id="player_bat_matches" placeholder="">
+                                <label for="player_bat_matches">Matches on Bat</label>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="form-floating">
+                                <input type="number" class="form-control" name="player_bowl_matches" required
+                                    id="player_bowl_matches" placeholder="">
+                                <label for="player_bowl_matches">Matches on Bowl</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Stats -->
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" name="player_bat_runs" required class="form-control"
+                                    id="player_bat_runs" placeholder="">
+                                <label for="player_bat_runs">Runs on Bat</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" name="player_bowl_runs" required class="form-control"
+                                    id="player_bowl_runs" placeholder="">
+                                <label for="player_bowl_runs">Run on Bowl</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" name="player_30s" required class="form-control" id="player_30s"
+                                    placeholder="">
+                                <label for="player_30s">Total 30s</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" name="player_50s" required class="form-control" id="player_50s"
+                                    placeholder="">
+                                <label for="player_50s">Total 50s</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" name="player_100s" required class="form-control" id="player_100s"
+                                    placeholder="">
+                                <label for="player_100s">Total 100s</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" name="player_max" required class="form-control" id="player_max"
+                                    placeholder="">
+                                <label for="player_max">High Score on Bat</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" name="player_wickets" required class="form-control"
+                                    id="player_wickets" placeholder="">
+                                <label for="player_wickets">Total Wickets</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" name="player_economy" required class="form-control"
+                                    id="player_economy" placeholder="">
+                                <label for="player_economy">Bowling Economy</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" name="player_miden" required class="form-control" id="player_miden"
+                                    placeholder="">
+                                <label for="player_miden">Total midden Overs</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+
+                            <div class="form-floating mb-3">
+                                <input type="number" name="player_hattrick" required class="form-control"
+                                    id="player_hattrick" placeholder="">
+                                <label for="player_hattrick">Total Hattrick</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Submit and Reset Buttons -->
+                    <div class="btn-group w-100">
+                        <button class="btn btn-success" type="submit">Add Player</button>
+                        <button class="btn btn-danger" data-bs-dismiss="modal" type="reset">Reset</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalExelUpload" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Settings</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 mt-3 mb-3">
+                    <p>Category Form</p>
+                    <p id="categorie_status"></p>
+                    <form hx-post="{% url 'add_categories' auction.id %}" hx-swap="innerHTML"
+                        hx-target="#categorie_status" hx-on::after-request="this.reset()">
+                        {% csrf_token %}
+                        <div class="form-floating mb-3">
+                            <input type="text" name="name" required class="form-control" id="name" placeholder="">
+                            <label for="name">Category Name</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" name="short_name" required class="form-control" id="short_name"
+                                        placeholder="">
+                                    <label for="short_name">Short Name</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" name="base_price" required class="form-control" id="base_price"
+                                        placeholder="">
+                                    <label for="base_price">Base Price</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="number" name="limit_count" required class="form-control" id="limit_count"
+                                placeholder="">
+                            <label for="limit_count">Limit Count</label>
+                        </div>
+
+                        <div class="btn-group w-100">
+                            <button class="btn btn-primary" type="submit">Add Category</button>
+                        </div>
+                    </form>
+                    <hr>
+                    <p>Upload Exel Sheet Player</p>
+                    <form class="col-12" enctype="multipart/form-data" hx-swap="innerHTML"
+                        hx-target="#player_table_wraper" hx-on::after-request="this.reset()"
+                        hx-post="{% url 'upload_from_exel' auction.id %}">
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                        aria-controls="flush-collapseOne">
+                                        Category List
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Category</th>
+                                                    <th scope="col">ID</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if categories %}
+                                                {% for i in categories %}
+                                                <tr>
+                                                    <th>{{i.name}}</th>
+                                                    <td>{{i.id}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item mb-2">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                                        aria-controls="flush-collapseTwo">
+                                        Upload Rules to Follow
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                    <ul class="text-danger">
+                                        <li>Dont Change the Headers in the Exel File</li>
+                                        <li>Dont Export The file in any other Formats</li>
+                                    </ul>
+                                    <p>Procudere</p>
+                                    <ol class="text-success">
+                                        <li>Download the this <a target="_blank" href="https://docs.google.com/spreadsheets/d/1D2BQNkxbveGdV5XiW3ZfCiQcaPppRnBI/edit?usp=sharing&ouid=118326421948579264413&rtpof=true&sd=true">File</a> in .xlsx Format</li>
+                                        <li>Fill all the Fields no blank field shoud be present</li>
+                                        <li>Fill the Player Category <code>By the ID mensioned in Category Table</code></li>
+                                    </ol>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+
+
+                        <input type="file" class="form-control" name="player_excel" id="player_excel" required>
+                        <button type="submit" data-bs-dismiss="modal" class="btn btn-success mt-3 mb-3 w-100">Upload
+                            Players</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+
+    
+
+    new DataTable("#playerTable", {
+        "ordering": false,
+    })
+
+
+</script>
+{% endblock %}

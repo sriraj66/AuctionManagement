@@ -1,0 +1,170 @@
+{% extends '_.html' %}
+
+{% block title %}
+Create Auction
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+
+
+{% block main %}
+
+<div class="card">
+    <div class="card-header text-center">
+        Create Auction
+    </div>
+    <div class="card-body d-flex justify-content-center align-items-center">
+
+        <form action="{% url 'create_auction' %}" method="post" class="col-lg-6 col-12">
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+                <input type="text" name="auction_name" required class="form-control" id="auction_name" placeholder="">
+                <label for="auction_name">Auction Name</label>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label for="sport_type">Sports Type</label>
+                    <select class="form-select" id="sport_type" name="sport_type">
+                        {% for i in sports_type %}
+                        <option value="{{i.0}}">{{i.0}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label for="auction_type">Auction Type</label>
+                    <select class="form-select" name="auction_type" id="auction_type">
+                        {% for i in auction_type %}
+                        <option value="{{i.0}}">{{i.0}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mt-3 mb-3">
+                <div class="col-6">
+                    <div class="form-floating mb-3">
+                        <input type="datetime-local" name="start_date" required class="form-control" id="start_date"
+                            placeholder="">
+                        <label for="start_date">Starting Date</label>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-floating mb-3">
+                        <input type="datetime-local" name="end_date" required class="form-control" id="end_date"
+                            placeholder="">
+                        <label for="end_date">Ending Date</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3 mb-3 row-cols-1 row-cols-lg-2">
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" name="auction_place" required class="form-control" id="auction_place"
+                            placeholder="">
+                        <label for="auction_place">Auction Place</label>
+                    </div>
+                </div>
+                <div class="col row row-cols-1 row-cols-lg-2">
+                    <div class="col">
+                        <div class="form-floating mb-3">
+                            <input type="number" name="squad_limit" required class="form-control" id="squad_limit"
+                                placeholder="">
+                            <label for="squad_limit">Squad Limit</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating mb-3">
+                            <input type="number" name="team_purse" required class="form-control" id="team_purse"
+                                placeholder="">
+                            <label for="team_purse">Team Purse</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- <table id="teamTable" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Logo</th>
+                        <th>Team Name</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="" class="rounded-circle" width="100px" alt=""></td>
+                        <td>Royal Challengers Bangaloure</td>
+                        <td>
+                            <button class="btn btn-flat" type="button"><i class="fas fa-trash text-danger"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table> -->
+
+
+
+            <div id="team_form_wraper" class="row d-flex justify-content-center align-items-center">
+                <div class="col-12 col-lg-6">
+                    <button type="submit" class="btn btn-success w-100"> <i class="fa fa-plus text-white"></i>
+                        Create</button>
+                </div>
+            </div>
+        </form>
+        <br>
+
+
+    </div>
+    <div class="card-body d-flex justify-content-center align-items-center">
+
+        <div class=" col-lg-10 col-12">
+
+            <table id="auction_table" class="table table-striped" style="width:100%; height:fit-content;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Sport</th>
+                        <th>Date</th>
+                        <th>Place</th>
+                        <th>Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in auctions %}
+                    <tr>
+                        <td>{{i.id}}</td>
+                        <td>{{i.auction_name}}</td>
+                        <td>{{i.auction_type}}</td>
+                        <td>{{i.sports_type}}</td>
+                        <td>{{i.starting_date.date}} - {{i.ending_date.date}}</td>
+                        <td>{{i.auction_place}}</td>
+                        <td><a href="{% url 'manage_team' i.id %}" class="btn btn-info">view</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <br>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+<!-- Scripts -->
+{% block script %}
+<script>
+    new DataTable("#auction_table",{
+        "ordering": false
+    })
+</script>
+{% endblock %}

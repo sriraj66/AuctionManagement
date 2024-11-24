@@ -1,0 +1,63 @@
+<hr>
+<br>
+{% if players %}
+<h5><strong>Players List</strong></h5>
+<table id="playerTable" class="table" style="width:100%">
+    <thead>
+        <tr>
+            <th>#id</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Place</th>
+            <th>Role</th>
+            <th>Team</th>
+            <th>Bidding</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in players %}
+        <tr>
+            <td>{{i.id}}</td>
+            <td><img src="{{i.player_image}}" alt="" width="50px" class="rounded-circle"></td>
+            <td>{{i.player_name}}</td>
+            <td>{{i.player_category}}</td>
+            <td>{{i.player_village}}</td>
+            <td>{{i.player_role}}</td>
+            <td>{{i.player_team}}</td>
+            <td>
+                {% if i.bidding %}
+                    {{i.bidding.curent_price}}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td>
+                <!-- Player Delete to do and Image Not Woeking -->
+                <button class="btn btn-flat"><i class="fa fa-eye"></i>View</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+{% else %}
+<p><strong>No Players Avilable</strong></p>
+{% endif %}
+
+
+
+
+<!-- Scripts -->
+{% block script %}
+<script>
+    new DataTable("#playerTable", {
+        "ordering": false,
+
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,337 @@
+
+<table id="playerTable" class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Category</th>
+            <th>Name</th>
+            <th>State</th>
+            <th>BasePrice</th>
+            <th>Status</th>
+            <th>SoldPrice</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in players %}
+        <tr>
+            <td>{{i.id}}</td>
+            <td>{{i.player_category.short_name}}</td>
+            <td>{{i.player_name}}</td>
+            <td>{{i.player_village}}</td>
+            <td>{{i.player_category.base_price}}</td>
+            <td>
+                {% if i.bid_status == "Sold" %}
+                <span class="badge rounded-pill text-bg-success">{{i.bid_status}}</span>
+                {% elif i.bid_status == "No Bid" %}
+                <span class="badge rounded-pill text-bg-warning">{{i.bid_status}}</span>
+                {% else %}
+                <span class="badge rounded-pill text-bg-danger">{{i.bid_status}}</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if i.bidding %}
+                {{i.bidding.curent_price}}
+                {% else %}
+                <p>0</p>
+                {% endif %}
+            </td>
+            <td class="btn-group w-100">
+                <button class="btn btn-flat" type="button"
+                            hx-post="{% url 'show_player_info' auction.id i.id %}"
+                            hx-swap="innerHTML"
+                            hx-target="#global_status"
+                            ><i class="fa fa-eye text-success"></i></button>
+                <button class="btn btn-info" type="button" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdropPlayer"
+                    data-id="{{ i.id }}"
+                    data-name="{{ i.player_name }}"
+                    data-category="{{ i.player_category.id }}"
+                    data-image="{{ i.player_image }}"
+                    data-mpl="{{ i.mpl_id }}"
+                    data-age="{{ i.player_age }}"
+                    data-village="{{ i.player_village }}"
+                    data-role="{{ i.player_role }}"
+                    data-matches="{{ i.player_matches }}"
+                    data-bat-matches="{{ i.player_bat_matches }}"
+                    data-bowl-matches="{{ i.player_bowl_matches }}"
+                    data-bat-runs="{{ i.player_bat_runs }}"
+                    data-bowl-runs="{{ i.player_bowl_runs }}"
+                    data-30s="{{ i.player_30s }}"
+                    data-50s="{{ i.player_50s }}"
+                    data-100s="{{ i.player_100s }}"
+                    data-max="{{ i.player_max }}"
+                    data-wickets="{{ i.player_wickets }}"
+                    data-economy="{{ i.player_economy }}"
+                    data-miden="{{ i.player_miden }}"
+                    data-hattrick="{{ i.player_hattrick }}"
+                    ><i class="ri-pencil-line"></i>
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+<!-- Modal -->
+<div class="modal fade modal-lg" id="staticBackdropPlayer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Player Details</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="modal-body">
+                    <form id="playereditform" class="col-12"
+                        method="post"
+                        >
+                        {% csrf_token %}
+
+                        <!-- Player Name -->
+                        <div class="form-floating mb-3">
+                            <input type="text" name="player_name" required class="form-control" id="player_name"
+                                placeholder="">
+                            <label for="player_name">Player Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <select name="player_category" class="form-select" id="player_category">
+                                {% for i in categories %}
+                                <option value="{{i.id}}">{{i.name}}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="player_category">Player Category</label>
+                        </div>
+                        <!-- Player Image -->
+                        <div class="mb-3 mt-3">
+                            <label for="player_image" class="form-label">Profile Image URL</label>
+                            <div class="row">
+                                <div class="col-10 col-lg-11">
+                                    <input class="form-control" id="player_image" name="player_image" type="url"
+                                        placeholder="Image URL" required>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- MPL ID -->
+                        <div class="form-floating mb-3">
+                            <input type="text" name="mpl_id" class="form-control" id="mpl_id" placeholder="">
+                            <label for="mpl_id">MPL ID</label>
+                        </div>
+
+                        <!-- Player Age -->
+                        <div class="form-floating mb-3">
+                            <input type="number" name="player_age" required class="form-control" id="player_age"
+                                placeholder="">
+                            <label for="player_age">Age</label>
+                        </div>
+
+                        <!-- Village Name -->
+                        <div class="form-floating mb-3">
+                            <input type="text" name="player_village" class="form-control" id="player_village"
+                                placeholder="">
+                            <label for="player_village">Village Name</label>
+                        </div>
+
+                        <!-- Player Role -->
+                        <div class="form-floating mb-3">
+                            <input type="text" name="player_role" required class="form-control" id="player_role"
+                                placeholder="">
+                            <label for="player_role">Player Role</label>
+                        </div>
+
+                        <!-- Player Total Matches -->
+                        <div class="form-floating mb-3">
+                            <input type="number" name="player_matches" required class="form-control" id="player_matches"
+                                placeholder="">
+                            <label for="player_matches">Total Matches</label>
+                        </div>
+
+
+
+                        <!-- Batting and Bowling Stats -->
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" name="player_bat_matches" required
+                                        id="player_bat_matches" placeholder="">
+                                    <label for="player_bat_matches">Matches on Bat</label>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" name="player_bowl_matches" required
+                                        id="player_bowl_matches" placeholder="">
+                                    <label for="player_bowl_matches">Matches on Bowl</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Stats -->
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" name="player_bat_runs" required class="form-control"
+                                        id="player_bat_runs" placeholder="">
+                                    <label for="player_bat_runs">Runs on Bat</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" name="player_bowl_runs" required class="form-control"
+                                        id="player_bowl_runs" placeholder="">
+                                    <label for="player_bowl_runs">Run on Bowl</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" name="player_30s" required class="form-control" id="player_30s"
+                                        placeholder="">
+                                    <label for="player_30s">Total 30s</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" name="player_50s" required class="form-control" id="player_50s"
+                                        placeholder="">
+                                    <label for="player_50s">Total 50s</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" name="player_100s" required class="form-control" id="player_100s"
+                                        placeholder="">
+                                    <label for="player_100s">Total 100s</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" name="player_max" required class="form-control" id="player_max"
+                                        placeholder="">
+                                    <label for="player_max">High Score on Bat</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" name="player_wickets" required class="form-control"
+                                        id="player_wickets" placeholder="">
+                                    <label for="player_wickets">Total Wickets</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" name="player_economy" required class="form-control"
+                                        id="player_economy" placeholder="">
+                                    <label for="player_economy">Bowling Economy</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" name="player_miden" required class="form-control" id="player_miden"
+                                        placeholder="">
+                                    <label for="player_miden">Total midden Overs</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+
+                                <div class="form-floating mb-3">
+                                    <input type="number" name="player_hattrick" required class="form-control"
+                                        id="player_hattrick" placeholder="">
+                                    <label for="player_hattrick">Total Hattrick</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="player_id" name="player_id">
+
+                        <!-- Submit and Reset Buttons -->
+                        <div class="btn-group w-100">
+                            
+                            <button class="btn btn-success" type="submit">Edit Player</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('staticBackdropPlayer');
+        modal.addEventListener('show.bs.modal', (event) => {
+            const button = event.relatedTarget; // Button that triggered the modal
+
+            // Get data-* attributes
+
+            const id = button.getAttribute('data-id');
+            const name = button.getAttribute('data-name');
+            const category = button.getAttribute('data-category');
+            const image = button.getAttribute('data-image');
+            const mpl = button.getAttribute('data-mpl');
+            const age = button.getAttribute('data-age');
+            const village = button.getAttribute('data-village');
+            const role = button.getAttribute('data-role');
+            const matches = button.getAttribute('data-matches');
+            const batMatches = button.getAttribute('data-bat-matches');
+            const bowlMatches = button.getAttribute('data-bowl-matches');
+            const batRuns = button.getAttribute('data-bat-runs');
+            const bowlRuns = button.getAttribute('data-bowl-runs');
+            const thirties = button.getAttribute('data-30s');
+            const fifties = button.getAttribute('data-50s');
+            const hundreds = button.getAttribute('data-100s');
+            const max = button.getAttribute('data-max');
+            const wickets = button.getAttribute('data-wickets');
+            const economy = button.getAttribute('data-economy');
+            const miden = button.getAttribute('data-miden');
+            const hattrick = button.getAttribute('data-hattrick');
+
+            // Set the modal fields
+            modal.querySelector("#playereditform").action = `{% url 'edit_player' auction.id %}`
+            modal.querySelector('#player_name').value = name;
+            modal.querySelector('#player_category').value = category;
+            modal.querySelector('#player_image').value = image;
+            modal.querySelector('#mpl_id').value = mpl;
+            modal.querySelector('#player_age').value = age;
+            modal.querySelector('#player_village').value = village;
+            modal.querySelector('#player_role').value = role;
+            modal.querySelector('#player_matches').value = matches;
+            modal.querySelector('#player_bat_matches').value = batMatches;
+            modal.querySelector('#player_bowl_matches').value = bowlMatches;
+            modal.querySelector('#player_bat_runs').value = batRuns;
+            modal.querySelector('#player_bowl_runs').value = bowlRuns;
+            modal.querySelector('#player_30s').value = thirties;
+            modal.querySelector('#player_50s').value = fifties;
+            modal.querySelector('#player_100s').value = hundreds;
+            modal.querySelector('#player_max').value = max;
+            modal.querySelector('#player_wickets').value = wickets;
+            modal.querySelector('#player_economy').value = economy;
+            modal.querySelector('#player_miden').value = miden;
+            modal.querySelector('#player_hattrick').value = hattrick;
+            modal.querySelector('#player_id').value = id;
+        });
+    });
+</script>
