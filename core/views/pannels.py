@@ -77,6 +77,31 @@ def show_bidding_info(request,auction_id):
     return HttpResponse(f"<p class='text-danger' > Invalid Request </p>")   
 
 
+# TODO
+def init_bid(request,auction_id,bid_id):
+
+    if request.method == "POST":
+        
+        auction = Auction.objects.get(id=auction_id)
+        bid_state = auction.current_bid()
+        
+        if bid_state:        
+            bidding_data = BiddingSerializer(bid_state)
+        else:
+            bidding_data = "No Current Active Bid"
+            
+        data = {
+            "method": DATA_INFO[2],
+            "message": "Showing Bidding Info",
+            "bidding": bidding_data
+        }
+        
+        broadcast_message_to_auction(auction_id,data=data)
+
+        return HttpResponse(f"<p class='text-success' > Showing {auction.auction_name} in Pannel </p>")   
+    
+    return HttpResponse(f"<p class='text-danger' > Invalid Request </p>")   
+
 
 def pannel(request,auction_id):
     context = {

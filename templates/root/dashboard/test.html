@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cricket Auction Stream</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+    body { font-family: Arial, sans-serif; background-color: #eee; margin: 0; padding: 0; }
+    .container { width: 80%; margin: 50px auto; background: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .player-card { display: flex; align-items: center; background: #00bcd4; color: white; padding: 20px; border-radius: 10px; }
+    .player-info { margin-left: 20px; }
+    .player-image { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; }
+    .bid { font-size: 24px; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="player-card animate__animated animate__fadeInUp">
+        <img src="player-image.jpg" alt="Player Image" class="player-image animate__animated animate__zoomIn">
+        <div class="player-info">
+            <div class="animate__animated animate__fadeIn">Player Name</div>
+            <div class="bid animate__animated animate__bounceIn">₹10,000</div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.js"></script>
+</body>
+</html>

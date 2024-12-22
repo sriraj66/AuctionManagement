@@ -32,7 +32,7 @@ def start_bid(request,auction_id):
             
             auction.current_bid_id = obj.id
             auction.save()
-            return render(request,PARTIALS+"player_bid_info.html",{
+            return render(request,PARTIALS+"bidding_control.html",{
                 "current_bid" : obj,
                 "auction": auction,
                 "player": player,

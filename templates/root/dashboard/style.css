@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+:root {
+    --animate-duration: 1000ms;
+    --animate-delay: 0.9s;
+    
+    --bg: #000;
+    --txt: #EEEEEE;
+    --primary : #00ADB5;
+    --secondary : #393E46;
+    --info : #222831;
+    --font: "Montserrat", serif;
+}
+
+body{
+    margin: 10px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: whitesmoke;
+    color: var(--txt);
+    font-family: var(--font);
+}
+
+.controls{
+    position: absolute;
+    bottom: 0;
+}
+
+
+
+.panel{
+    width: 1920px;
+    height: 1080px;
+    background-color: var(--bg);
+    position: relative;
+}
+.transition_a{
+    position:absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.transition_a .area{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    /* background-color: red;  */
+    padding: 20px;
+    overflow: hidden;
+}
+.transition_a .status{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--info);
+    width: 80%;
+}
+
+.transition_a .img img{
+    border: 2px solid var(--primary);
+    height: 200px;
+    width: auto;
+}
+.transition_a .playerinfo{
+    padding: 20px;
+    width: 100%;
+    text-align: start;
+}
+.transition_a .playerinfo h2{
+    font-size: 30px;
+}
+
+.transition_a .playerinfo p{
+    font-size: 14px;
+    color: var(--primary);
+}
+
+.transition_a .bidding-price{
+    padding: 20px;
+    text-align: center;
+    font-size: 50px;
+    width: 100%;
+    font-weight: 800;
+    background-color: var(--info);
+}
+.transition_a .player-stats{
+    width: 80%;
+    background-color: var(--primary);
+}
+.transition_a .player-stats table{
+    width: 100%;
+}
+
+.transition_a th{
+    color: var(--info);
+    text-transform: capitalize;
+    font-weight: 800;
+}
+.transition_a th, td{
+    border: 1px solid var(--secondary);
+    padding: 10px;
+    text-align: start;
+}
+.transition_a td{
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1.3px;
+
+}

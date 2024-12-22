@@ -103,3 +103,5 @@ env.bak/
 venv.bak/
 
 *.log
+
+media

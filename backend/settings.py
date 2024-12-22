@@ -20,6 +20,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'channels',
     'rest_framework',
     'django.contrib.admin',
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'authentication'
 ]
 
 
@@ -129,9 +131,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-# LOGIN_URL = 'login'
-# LOGOUT_REDIRECT_URL = 'logout'
-# LOGIN_REDIRECT_URL = 'index'
+LOGIN_URL = 'user_login'
+LOGOUT_REDIRECT_URL = 'user_login'
+LOGIN_REDIRECT_URL = 'menu'
 
 
 # Default primary key field type
