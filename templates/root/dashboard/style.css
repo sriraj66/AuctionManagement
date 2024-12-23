@@ -1,17 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
 :root {
-    --animate-duration: 1000ms;
+    --animate-duration: 1300ms;
     --animate-delay: 0.9s;
-    
-    --bg: #000;
-    --txt: #EEEEEE;
-    --primary : #00ADB5;
-    --secondary : #393E46;
-    --info : #222831;
+
+    --bg: #000000;
+    --txt: #eeeeee;
+    --primary: #00adb5;
+    --secondary: #393e46;
+    --info: #222831;
     --font: "Montserrat", serif;
 }
 
-body{
+body {
     margin: 10px;
     overflow: hidden;
     display: flex;
@@ -22,21 +23,20 @@ body{
     font-family: var(--font);
 }
 
-.controls{
+.controls {
     position: absolute;
     bottom: 0;
 }
 
-
-
-.panel{
+.panel {
     width: 1920px;
     height: 1080px;
     background-color: var(--bg);
     position: relative;
 }
-.transition_a{
-    position:absolute;
+
+.transition_a {
+    position: absolute;
     bottom: 0;
     width: 100%;
     display: flex;
@@ -45,7 +45,7 @@ body{
     align-items: center;
 }
 
-.transition_a .area{
+.transition_a .area {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,7 +55,8 @@ body{
     padding: 20px;
     overflow: hidden;
 }
-.transition_a .status{
+
+.transition_a .status {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -63,26 +64,28 @@ body{
     width: 80%;
 }
 
-.transition_a .img img{
+.transition_a .img img {
     border: 2px solid var(--primary);
     height: 200px;
     width: auto;
 }
-.transition_a .playerinfo{
+
+.transition_a .playerinfo {
     padding: 20px;
     width: 100%;
     text-align: start;
 }
-.transition_a .playerinfo h2{
+
+.transition_a .playerinfo h2 {
     font-size: 30px;
 }
 
-.transition_a .playerinfo p{
+.transition_a .playerinfo p {
     font-size: 14px;
     color: var(--primary);
 }
 
-.transition_a .bidding-price{
+.transition_a .bidding-price {
     padding: 20px;
     text-align: center;
     font-size: 50px;
@@ -90,27 +93,231 @@ body{
     font-weight: 800;
     background-color: var(--info);
 }
-.transition_a .player-stats{
+
+.transition_a .player-stats {
     width: 80%;
     background-color: var(--primary);
 }
-.transition_a .player-stats table{
+
+.transition_a .player-stats table {
     width: 100%;
 }
 
-.transition_a th{
+.transition_a th {
     color: var(--info);
     text-transform: capitalize;
     font-weight: 800;
 }
-.transition_a th, td{
+
+.transition_a th,
+td {
     border: 1px solid var(--secondary);
     padding: 10px;
     text-align: start;
 }
-.transition_a td{
+
+.transition_a td {
     font-size: 15px;
     font-weight: 600;
     letter-spacing: 1.3px;
+}
+/* T_B */
+.transition_b {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
+.transition_b .title {
+    width: 100%;
+    text-align: center;
+}
+
+.transition_b .title h2 {
+    font-size: 52px;
+    color: var(--primary);
+    text-transform: capitalize;
+    letter-spacing: 1.4px;
+    text-shadow: 2px 3px 5px var(--secondary);
+}
+
+.transition_b .title p {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    text-transform: capitalize;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.teams{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.teams img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.teams table{
+    width: 80%;
+}
+.teams table thead{
+    background-color: var(--primary);
+}
+
+.teams table thead tr th{
+    padding: 10px;
+    text-align: start;
+    font-size: 22px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+.teams table tbody{
+    background-color: var(--secondary);
+}
+
+.teams .img-wraper{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.teams .price , .teams .pr, .teams .teamname{
+    text-align:start;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+}
+.transition_b .divider {
+    width: 80%;
+    background-color: #00acb534;
+    height: 3px;
+}
+
+
+
+
+/* T_C */
+.transition_c{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.transition_c .title {
+    width: 100%;
+    text-align: center;
+}
+
+.transition_c .title h2 {
+    font-size: 52px;
+    color: var(--primary);
+    text-transform: capitalize;
+    letter-spacing: 1.4px;
+    text-shadow: 2px 3px 5px var(--secondary);
+}
+
+.transition_c .title p {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    text-transform: capitalize;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.transition_c .area{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.transition_c .area .img{
+    padding: 20px;
+    background-color: var(--primary);
+}
+.transition_c .area .img img{
+    border-radius: 10px;
+    height: 400px;
+    width: auto;
+    max-width: 380px;
+    min-width: 300;
+}
+
+.transition_c .area .playerinfo{
+    width: 50%;
+    text-align: start;
+}
+
+.transition_c .area .playerinfo .rows{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: start;
+    border-left: 10px solid var(--bg) ;
+}
+.transition_c .area .playerinfo .rows div{
+    padding: 10px;
+    font-size: 28px;
+
+}
+
+
+.transition_c .area .playerinfo .rows .left{
+    width: 100%;
+    padding-left: 25px;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    background-color: var(--secondary);
+}
+
+.transition_c .area .playerinfo .rows .right{
+    width: 100%;
+    padding-left: 25px;
+    text-transform: uppercase;
+    font-weight: 800;
+    text-shadow: 2px 2px 2px var(--secondary);
+    background-color: var(--primary);
+    border: 1px solid var(--secondary);
+}
+.transition_c .player-stats{
+    width: 1395px;
+}
+.transition_c .player-stats table{
+    width: 100%;
+}
+.transition_c .player-stats thead{
+    background-color: var(--secondary);
+}
+.transition_c .player-stats tbody{
+    background-color: var(--info);
+}
+.transition_c .player-stats th{
+    text-transform: uppercase;
+}
+.transition_c .player-stats td{
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+
+.transition_c .player-stats table td, .transition_c .player-stats table th{
+    padding: 20px;
+}
+
+.hidden {
+    display: none;
 }
