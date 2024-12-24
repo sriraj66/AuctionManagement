@@ -1,0 +1,15 @@
+.venv
+.env
+**/migrations/**
+!**/migrations/__init__.py
+media
+__pycache__/
+
+db.sqlite3
+nginx.conf
+Dockerfile
+docker-compose.yml
+.env
+static/
+media/
+data/
