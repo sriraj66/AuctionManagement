@@ -54,7 +54,7 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         
         player = await self.get_player(player_id)
         
-        print(f"Player ID: {player[0].player_name}, Price: {price}")
+        print(f"Player Name: {player[0].player_name}, Price: {price}")
 
         await async_broadcast_message_to_auction(
             self.auction_id,

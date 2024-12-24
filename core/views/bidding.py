@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect,HttpResponse
 from ..models import Auction,Team, Category, Player,Bidding
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import success,error,warning
-
+from .pannels import show_bidding_result
 
 TEMPLATE_ROOT = "root/"
 PARTIALS = TEMPLATE_ROOT+"partials/"
@@ -46,6 +46,7 @@ def start_bid(request,auction_id):
     
     return HttpResponse("<p>No Player Exist</p>")
 
+#TODO Fix PRICE ISSUE
 @login_required
 def sell_player(request,bidding_id):
     bidding = Bidding.objects.get(id=bidding_id,user=request.user)
@@ -57,11 +58,13 @@ def sell_player(request,bidding_id):
             sold_to = request.POST.get("sold_to")
             bidding.curent_price = current_price
             print(current_price)
+            bidding.player.is_bidded = True
             
             # Sold
             if int(sold_to) != -1:
                 team = Team.objects.get(id=sold_to)
                 bidding.team = team
+                
                 if bidding.team.balance() < int(current_price):
                     error(request,f"Team {team.team_short_name} not enough team balance")
                     bidding.auction.save()
@@ -69,11 +72,9 @@ def sell_player(request,bidding_id):
                 
                 bidding.is_sold = True
                 bidding.player.is_sold = True
-                success(request,f"Player Sold to {bidding.team}")
+                bidding.player.player_team = team
+                success(request,f"Player Sold to {bidding.team} for RS : {current_price}")
                 
-                bidding.team.used_amount += int(current_price)
-                bidding.team.max_bid = max(bidding.team.max_bid,int(current_price))
-                bidding.team.save()
                 
             # Unsold
             else:
@@ -83,14 +84,25 @@ def sell_player(request,bidding_id):
                 
             bidding.auction.save()
             bidding.player.save()
-            bidding.save()            
+            bidding.save()
             
+            
+            if(bidding.team):
+                bidding.team.used_amount = bidding.calculate_purse()
+                print("Amount  : ",bidding.team.used_amount)
+                bidding.team.max_bid = max(bidding.team.max_bid,int(current_price))
+                bidding.team.save()
+                
+            
+            #Show Bidding on the panel
+            show_bidding_result(bid_id=bidding_id) 
+            print("Message to the Panel Sent ")
             
             return redirect("dashboard",bidding.auction.id)
         
     except Exception as e:
         print(e)
-    error("Somthing went Wrong")
+    error(request,"Somthing went Wrong")
     bidding.auction.save()
     return redirect("dashboard",bidding.auction.id)
   

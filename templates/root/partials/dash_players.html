@@ -47,7 +47,6 @@
                     data-id="{{ i.id }}"
                     data-name="{{ i.player_name }}"
                     data-category="{{ i.player_category.id }}"
-                    data-image="{{ i.player_image }}"
                     data-mpl="{{ i.mpl_id }}"
                     data-age="{{ i.player_age }}"
                     data-village="{{ i.player_village }}"
@@ -86,7 +85,7 @@
             <div class="modal-body">
                 
                 <div class="modal-body">
-                    <form id="playereditform" class="col-12"
+                    <form id="playereditform" class="col-12" enctype="multipart/form-data"
                         method="post"
                         >
                         {% csrf_token %}
@@ -111,7 +110,7 @@
                             <label for="player_image" class="form-label">Profile Image URL</label>
                             <div class="row">
                                 <div class="col-10 col-lg-11">
-                                    <input class="form-control" id="player_image" name="player_image" type="url"
+                                    <input class="form-control" id="player_image" name="player_image" type="file" accept="image/*"
                                         placeholder="Image URL" required>
                                 </div>
 
@@ -290,7 +289,6 @@
             const id = button.getAttribute('data-id');
             const name = button.getAttribute('data-name');
             const category = button.getAttribute('data-category');
-            const image = button.getAttribute('data-image');
             const mpl = button.getAttribute('data-mpl');
             const age = button.getAttribute('data-age');
             const village = button.getAttribute('data-village');
@@ -313,7 +311,6 @@
             modal.querySelector("#playereditform").action = `{% url 'edit_player' auction.id %}`
             modal.querySelector('#player_name').value = name;
             modal.querySelector('#player_category').value = category;
-            modal.querySelector('#player_image').value = image;
             modal.querySelector('#mpl_id').value = mpl;
             modal.querySelector('#player_age').value = age;
             modal.querySelector('#player_village').value = village;
