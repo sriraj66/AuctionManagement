@@ -33,9 +33,9 @@ class PlayerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AuctionSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    category_set = CategorySerializer(many=True, read_only=True)
-    player_set = PlayerSerializer(many=True, read_only=True)
+    # user = UserSerializer()
+    # category_set = CategorySerializer(many=True, read_only=True)
+    # player_set = PlayerSerializer(many=True, read_only=True)
     team_set = TeamSerializer(many=True, read_only=True)
 
     class Meta:
@@ -43,11 +43,9 @@ class AuctionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BiddingSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    auction = AuctionSerializer()
-    team = TeamSerializer()
-    player = PlayerSerializer()
-
+    player = PlayerSerializer(read_only=True)
+    team_set = TeamSerializer(read_only=True)
+    
     class Meta:
         model = Bidding
         fields = '__all__'

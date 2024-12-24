@@ -20,7 +20,7 @@
         {% for i in players %}
         <tr>
             <td>{{i.id}}</td>
-            <td><img src="{{i.player_image}}" alt="" width="50px" class="rounded-circle"></td>
+            <td><img src="{{i.player_image.url}}" alt="" width="50px" height="50px" class="rounded-circle"></td>
             <td>{{i.player_name}}</td>
             <td>{{i.player_category}}</td>
             <td>{{i.player_village}}</td>

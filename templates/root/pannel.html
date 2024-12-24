@@ -1,64 +1,382 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THEME 1</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}" />
     
+  </head>
 
-    Pannel
-    <ul id="messages" >
-    </ul>
+  <body>
+    <div class="panel">
+      <div class="transition_a hidden animate__animated" id="T_A">
+        <div class="area">
+            <div class="logo">
+                <div class="img animate__animated animate__bounceInUp" id="A_player_img">
+                
+                </div>
+            </div>
+            <div class="status animate__animated animate__jackInTheBox">
+                <div id="A_player_info" class="playerinfo animate__animated animate__zoomInLeft">
+                
+                </div>
+                <div id="current_price" class="bidding-price" ></div>
+            </div>
+            <div class="player-stats animate__animated animate__backInRight">
+                <table>
+                <thead>
+                    <tr>
+                        <th>AGE</th>
+                        <th>Batting Average</th>
+                        <th>Average Wicket </th>
+                        <th>Economy</th>
+                        <th>30's</th>
+                        <th>50's</th>
+                        <th>100's</th>
+                    </tr>
+                </thead>
+                <tbody id="A_player_table">
+                    
+                </tbody>
+                </table>
+            </div>
+            </div>
+      </div>
 
+      <!-- COMPLEATED -->
+      <div class="transition_b hidden animate__animated" id="T_B">
+        
+        <div class="title animate__animated animate__zoomInDown ">
+            <h2 id="auction_name" >ZOHO MEGA AUCTION</h2>
+            <p id="description">5 Teams go na ACT</p>
+        </div>
+        <div class="teams animate__animated animate__flipInY">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="img-wraper">Logo</th>
+                        <th>Name</th>
+                        <th>Players</th>
+                        <th>Purse Remaining</th>
+                    </tr>
+                </thead>
+                <tbody id="team_table_body">
+                    
+                    <tr>
+                        <td class="img-wraper">
+                            <img src="https://i.pinimg.com/736x/1f/7c/72/1f7c723c3c7d3412c4af6f392e200b9f.jpg" alt="">
+                        </td>
+                        <td class="teamname">Royal Challengers Bangalore</td>
+                        <td class="pr" >11</td>
+                        <td class="price animate__animated animate__zoomIn animate__delay-1s">₹ 20000</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+      </div>
+
+
+      <div class="transition_c animate__animated hidden" id="T_C">
+        
+      </div>
+
+      <div class="transition_d animate__animated hidden" id="T_D">
+        <div class="title animate__animated animate__zoomInDown ">
+            <h2>NEXT PLAYER ON AUCTION</h2>
+            <p>PLAYER PROFILE SHOWING</p>
+        </div>
+        <div class="area">
+            <div class="img animate__animated animate__fadeInLeft" id="D_img" >
+                <img
+                src="https://www.hindustantimes.com/static-content/1y/cricket-logos/players/virat-kohli.png"
+                alt=""
+              />
+            </div>
+            <div class="info animate__animated animate__fadeInRight">
+
+                <div id="D_status" class="rows">
+                    <p>SOLD</p>
+                </div>
+                <div class="rows">
+                    <div class="left">NAME</div>
+                    <div class="right" id="D_name" >Virat Kolhi</div>
+                </div>
+
+                <div class="rows">
+                    <div class="left">ROLE</div>
+                    <div class="right" id="D_role" >Right Hand Bats Man</div>
+                </div>
+
+                <div class="rows">
+                    <div class="left">AGE</div>
+                    <div class="right" id="D_age" >16</div>
+                </div>
+
+                <div class="rows team" id="D_team" >
+                  
+                </div>
+
+                <div class="rows price">
+                    <div class="left">PRICE</div>
+                    <div class="right" id="D_price">₹ 200000</div>
+                </div>
+
+            </div>
+            
+        </div>
+      </div>
+
+    </div>
+
+    <div class="controls">
+      <button class="reload" onclick="location.reload()">Reload</button>
+      <button class="reload" onclick="hide_A()">HIDE A</button>
+      <button class="reload" onclick="hide_B()">HIDE B</button>
+      <button class="reload" onclick="hide_C()">HIDE C</button>
+      <button class="reload" onclick="hide_D()">HIDE D</button>
+    </div>
+    <script src="{% static 'core/js/script.js' %}"></script>
+
+
+    <!-- CONNECTIONS -->
     <script>
+        let is_bidding = false;
+        
+        function setPrice(newPrice, priceElement, animationClass = "animate__flipInX") {
+            priceElement.classList.add('animate__animated', animationClass, 'animate__faster');
+
+            let handleAnimationStart = () => {
+                priceElement.textContent = `₹ ${newPrice}`;
+            };
+
+            let handleAnimationEnd = () => {
+                priceElement.classList.remove('animate__animated', animationClass, 'animate__faster');
+                priceElement.removeEventListener('animationstart', handleAnimationStart);
+                priceElement.removeEventListener('animationend', handleAnimationEnd);
+            };
+
+            priceElement.addEventListener('animationstart', handleAnimationStart);
+            priceElement.addEventListener('animationend', handleAnimationEnd);
+        }
+
+
         const auctionId = `{{ auction.id }}`;
         const socket = new WebSocket(
             'ws://' + window.location.host + '/ws/auction/' + auctionId + '/'
         );
         let TYPES = ["INIT", "MESSAGE","BIDDING", "CLOSE"]
-        let DATA_INFO = ["PLAYER","AUCTION"]
-        
-        socket.onmessage = function(e) {
+        let DATA_INFO = ["PLAYER_PROFILE","AUCTION_START","BIDDING_PLAYER","BIDDING_RESULT"]
+
+        socket.onmessage = async (e) => {
             const response = JSON.parse(e.data);
+            console.log(response);
 
-            let li = document.createElement('li');
-            let data = "";
-            
-            if(response.type==TYPES[0]){
-                
-                console.log("Initing")
-                data = response.data.message
+            if(response.type==TYPES[1]){
 
-            }else if(response.type == TYPES[1]){
-            
-                console.log("Message");
-                data = response.data.message
-                
-                if(response.data.method == DATA_INFO[2] ){
-                    console.log(response.data)
+                let data = response.data
+                console.log(data.message)
+
+                if(data.method==DATA_INFO[1]){
+                    let auction = data.auction;
+                    let timestamp = Date.now();
+                    // Convert timestamp to a readable date and time format
+                    let currentDate = new Date(timestamp);
+                    // Formatting date 
+                    let formattedDate = currentDate.toLocaleString();
+                    document.getElementById("auction_name").textContent = auction.auction_name;
+                    document.getElementById("description").textContent = `${auction.auction_place} at ${formattedDate} `;
+
+                    let team_list = "";
+
+                    for(let team of auction.team_set){
+                        team_list += `<tr>
+                                        <td class="img-wraper">
+                                            <img src="${team.team_logo}" alt="${team.team_short_name}">
+                                        </td>
+                                        <td class="teamname">${team.team_name}</td>
+                                        <td class="pr" >${auction.squad_limit}</td>
+                                        <td class="price animate__animated animate__zoomIn animate__delay-1s">₹ ${team.purse}</td>
+                                    </tr>`
+                    }
+
+                    document.getElementById("team_table_body").innerHTML = team_list;
+                    await hide_B()
                 }
 
-                if (response.data.method == DATA_INFO[0]){
-                    let player = response.data
-                    console.log(player)
-                }
-                
-            }else if(response.type = TYPES[2]){
-            
-                console.log("Bidding")
-                data = response.data.message
-                console.log(response.data.player,response.data.price)
-            }
-            else{
-            
-                data = "CLOSING"
-            
-            }
-            li.innerHTML = data
+                if(data.method==DATA_INFO[0]){
+                    let player = data.player
+                    console.log("Player Profile");
+                    
+                    document.getElementById("T_C").innerHTML = `
+                    <div class="title animate__animated animate__zoomInDown">
+                                    <h2>PLAYER PROFILE</h2>
+                                    <p>${player.player_name} from ${player.player_village}</p>
+                                </div>
+                                <div class="area">
+                                    <div class="img animate__animated animate__flip">
+                                        <img
+                                        src="${player.player_image}"
+                                        alt="${player.player_name}"
+                                        />
+                                    </div>
+                                    <div class="playerinfo animate__animated animate__jackInTheBox">
+                                        <div class="rows">
+                                            <div class="left">NAME</div>
+                                            <div class="right">${player.player_name}</div>
+                                        </div>
 
-            document.getElementById("messages").appendChild(li);
+                                        <div class="rows">
+                                            <div class="left">ROLE</div>
+                                            <div class="right">${player.player_role}</div>
+                                        </div>
+
+                                        <div class="rows">
+                                            <div class="left">MPL ID</div>
+                                            <div class="right">${player.mpl_id}</div>
+                                        </div>
+
+                                        <div class="rows">
+                                            <div class="left">Total Matches</div>
+                                            <div class="right">${player.player_matches}</div>
+                                        </div>
+
+                                        <div class="rows">
+                                            <div class="left">RUNS</div>
+                                            <div class="right">${player.player_bat_runs}</div>
+                                        </div>
+
+                                        <div class="rows">
+                                            <div class="left">High Score</div>
+                                            <div class="right">${player.player_max}</div>
+                                        </div>
+                                        <div class="rows">
+                                            <div class="left">Wicket</div>
+                                            <div class="right">${player.player_wickets}</div>
+                                        </div>
+
+                                        <div class="rows price">
+                                            <div class="left">BASE PRICE</div>
+                                            <div class="right">₹ ${player.player_category.base_price}</div>
+                                        </div>
+
+                                    </div>
+                                    
+                                </div>
+                                <br>
+                                <div class="player-stats animate__animated  animate__zoomIn">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th>AGE</th>
+                                            <th>Batting Average</th>
+                                            <th>Average Wicket </th>
+                                            <th>Economy</th>
+                                            <th>30's</th>
+                                            <th>50's</th>
+                                            <th>100's</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>${player.player_age}</td>
+                                            <td>${Math.round(player.player_bat_runs/player.player_bat_matches)}</td>
+                                            <td>${Math.round(player.player_wickets/player.player_bowl_matches)}</td>
+                                            <td>${player.player_economy}</td>
+                                            <td>${player.player_30s}</td>
+                                            <td>${player.player_50s}</td>
+                                            <td>${player.player_100s}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                `
+            
+                    await hide_C()
+                }
+
+
+                if(data.method==DATA_INFO[2]){
+                    let bidding = data.bidding
+                    console.log("Bidding : ",bidding.curent_price);
+                    
+                    let player = bidding.player
+                    document.getElementById("A_player_info").innerHTML = `<h2>${player.player_name}</h2><p>${player.player_role}</p>`;
+                    document.getElementById("A_player_img").innerHTML = `<img src="${player.player_image}" alt="${player.player_name}"/>`;
+                    document.getElementById("current_price").innerText = `₹ ${bidding.curent_price}`;
+                    setPrice(bidding.curent_price,document.getElementById("current_price"))
+                    document.getElementById("A_player_table").innerHTML = `
+                    <tr>
+                        <td>${player.player_age}</td>
+                        <td>${Math.round(player.player_bat_runs/player.player_bat_matches)}</td>
+                        <td>${Math.round(player.player_wickets/player.player_bowl_matches)}</td>
+                        <td>${player.player_economy}</td>
+                        <td>${player.player_30s}</td>
+                        <td>${player.player_50s}</td>
+                        <td>${player.player_100s}</td>
+                    </tr>`
+
+                    await hide_A()
+                }
+
+                if(data.method==DATA_INFO[3]){
+                    console.log("START")
+
+                    let bidding = data.bidding;
+                    let player = bidding.player;
+                    let status = []
+                    if(bidding.is_sold==false){
+                        status[0]='unsold'
+                        status[1]="Un Sold"
+                        document.getElementById("D_team").innerHTML=""
+
+                    }else{
+                        status[0]='sold'
+                        status[1]='Sold'
+                        if(player.player_team!=undefined){
+                        document.getElementById("D_team").innerHTML = `<div class="left">TEAM</div><div class="right" > <img src="${player.player_team.team_logo}" alt="">${player.player_team.team_name}</div>`
+                        }
+                    }
+                    console.log("Middle")
+
+                    document.getElementById("D_status").innerHTML=`<p class="${status[0]}">${status[1]}</p>`
+                    document.getElementById("D_name").textContent = player.player_name
+                    document.getElementById("D_age").textContent = player.player_age
+                    document.getElementById("D_role").textContent = player.player_role
+                    
+                    
+                    setPrice(bidding.curent_price,document.getElementById("D_price"))
+                    document.getElementById("D_img").innerHTML = `<img src="${player.player_image}" alt="" />`
+                    console.log("END")
+
+                    await hide_D()
+
+                }
+
+            }
+
+            
+            // While Bidding
+            if(response.type == TYPES[2]){
+
+                data = response.data
+                console.log(data.message)
+                let price = data.price
+                let current_price = document.getElementById("current_price")
+
+                setPrice(price,current_price)
+                
+
+            }
+
         };
         socket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
@@ -74,7 +392,6 @@
             }
         });
     </script>
-    
 
-</body>
+  </body>
 </html>

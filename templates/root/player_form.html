@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Registration Form</title>
+    <link rel="shortcut icon" href="{% static 'img/logo.png' %}" type="image/x-icon">
+    <script src="https://unpkg.com/htmx.org@2.0.3"
+        integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+        <!-- Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
+</head>
+
+<body class="bg-green-50">
+
+
+    <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8 animate__animated animate__fadeIn" id="share_player_form">
+        <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8">
+            <form class="space-y-6" hx-swap="outerHTML" hx-target="#share_player_form" enctype="multipart/form-data"
+                 hx-post="{% url 'share_player_form' auction.id auction.user.id %}">
+                {% csrf_token %}
+
+                <div class="space-y-4 font-bold text-[25px] text-center capitalize">
+                    <h1><strong class="text-green-700 text-[30px]">{{auction.auction_name}}</strong> Registration Form</h2>
+                </div>
+
+                <!-- Player Basic Info -->
+                <div class="space-y-4">
+                    <div>
+                        <label for="player_name" class="block text-sm font-medium text-gray-700">Player Name</label>
+                        <input type="text" name="player_name" id="player_name" required  placeholder="Enter Your Name"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                    </div>
+
+                    <div>
+                        <label for="player_category" class="block text-sm font-medium text-gray-700">Player Category</label>
+                        <select name="player_category" id="player_category" 
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                            {% for i in categories %}    
+                            <option value="{{i.id}}">{{i.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="player_image" class="block text-sm font-medium text-gray-700">Player Image</label>
+                        <input type="file" name="player_image" id="player_image" accept="image/*" required
+                            class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                    </div>
+                </div>
+
+                <!-- Player Details Grid -->
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="mpl_id" class="block text-sm font-medium text-gray-700">MPL ID</label>
+                        <input type="text" name="mpl_id" id="mpl_id"  required placeholder="Your MPL ID"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                    </div>
+
+                    <div>
+                        <label for="player_age" class="block text-sm font-medium text-gray-700">Age</label>
+                        <input type="number" name="player_age" id="player_age" required placeholder="Enter your Age"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                    </div>
+
+                    <div>
+                        <label for="player_village" class="block text-sm font-medium text-gray-700">Village Name</label>
+                        <input type="text" name="player_village" id="player_village"  required placeholder="Enter Your Native"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                    </div>
+
+                    <div>
+                        <label for="player_role" class="block text-sm font-medium text-gray-700">Player Role</label>
+                        <select name="player_role" id="player_role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                            <option value="" disabled selected>Select Player Role</option>
+                            <option value="Right Hand Batsman" selected>Right Hand Batsman</option>
+                            <option value="Left Hand Batsman">Left Hand Batsman</option>
+                            <option value="Opener">Opener</option>
+                            <option value="Middle-Order Batsman">Middle-Order Batsman</option>
+                            <option value="Lower-Order Batsman">Lower-Order Batsman</option>
+                            <option value="Wicketkeeper Batsman">Wicketkeeper</option>
+                            <option value="Right Hand Bowler">Right Hand Bowler</option>
+                            <option value="Left Hand Bowler">Left Hand Bowler</option>
+                            <option value="Fast Bowler">Fast Bowler</option>
+                            <option value="Medium-Pace Bowler">Medium-Pace Bowler</option>
+                            <option value="Spin Bowler">Spin Bowler</option>
+                            <option value="All-Rounder">All-Rounder</option>
+                            <option value="Opening Bowler">Opening Bowler</option>
+                            <option value="Death Bowler">Death Bowler</option>
+                            <option value="Part-Time Bowler">Part-Time Bowler</option>
+                            <option value="Fielding Specialist">Fielding Specialist</option>
+                            <option value="Power-Hitter">Power-Hitter</option>
+                        </select>
+                        <script>
+                            $(document).ready(function() {
+                              $('#player_role').select2({
+                                placeholder: "Select Player Role",
+                                allowClear: true
+                              });
+                            });
+                        </script>
+                          
+
+                    </div>
+                </div>
+
+                <!-- Statistics Section -->
+                <div class="space-y-6">
+                    <h3 class="text-lg font-medium text-gray-900">Player Statistics</h3>
+                    
+                    <!-- Batting & Bowling Stats -->
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                            <label for="player_bat_matches" class="block text-sm font-medium text-gray-700">Batting Matches</label>
+                            <input type="number" name="player_bat_matches" id="player_bat_matches" required 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                        </div>
+
+                        <div>
+                            <label for="player_bowl_matches" class="block text-sm font-medium text-gray-700">Bowling Matches</label>
+                            <input type="number" name="player_bowl_matches" id="player_bowl_matches" required 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                        </div>
+
+                        <div>
+                            <label for="player_bat_runs" class="block text-sm font-medium text-gray-700">Batting Runs</label>
+                            <input type="number" name="player_bat_runs" id="player_bat_runs" required 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                        </div>
+
+                        <div>
+                            <label for="player_bowl_runs" class="block text-sm font-medium text-gray-700">Bowling Runs</label>
+                            <input type="number" name="player_bowl_runs" id="player_bowl_runs" required 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                        </div>
+                    </div>
+
+                    <!-- Achievement Stats -->
+                    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                        <div>
+                            <label for="player_30s" class="block text-sm font-medium text-gray-700">30s</label>
+                            <input type="number" name="player_30s" id="player_30s" required 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                        </div>
+
+                        <div>
+                            <label for="player_50s" class="block text-sm font-medium text-gray-700">50s</label>
+                            <input type="number" name="player_50s" id="player_50s" required 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                        </div>
+
+                        <div>
+                            <label for="player_100s" class="block text-sm font-medium text-gray-700">100s</label>
+                            <input type="number" name="player_100s" id="player_100s" required 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                        </div>
+
+                        <div>
+                            <label for="player_max" class="block text-sm font-medium text-gray-700">Highest Score</label>
+                            <input type="number" name="player_max" id="player_max" required 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                        </div>
+                    </div>
+
+                    <!-- Bowling Stats -->
+                    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                        <div>
+                            <label for="player_wickets" class="block text-sm font-medium text-gray-700">Wickets</label>
+                            <input type="number" name="player_wickets" id="player_wickets" required 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                        </div>
+
+                        <div>
+                            <label for="player_economy" class="block text-sm font-medium text-gray-700">Economy</label>
+                            <input type="number" name="player_economy" id="player_economy" required 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                        </div>
+
+                        <div>
+                            <label for="player_miden" class="block text-sm font-medium text-gray-700">Maiden Overs</label>
+                            <input type="number" name="player_miden" id="player_miden" required 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                        </div>
+
+                        <div>
+                            <label for="player_hattrick" class="block text-sm font-medium text-gray-700">Hat-tricks</label>
+                            <input type="number" name="player_hattrick" id="player_hattrick" required 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" 
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        Register
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+        <div class="fixed bottom-0 right-0 p-4 flex items-center justify-center text-center space-x-2">
+            <img src="{% static 'img/logo.png' %}" alt="Logo" class="w-10 h-10">
+            <span class="text-sm text-gray-500">Auction Management © 2024</span>
+        </div>
+    
+
+</body>
+
+</html>

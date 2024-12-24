@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    Pannel
+    <ul id="messages" >
+    </ul>
+
+    <script>
+        const auctionId = `{{ auction.id }}`;
+        const socket = new WebSocket(
+            'ws://' + window.location.host + '/ws/auction/' + auctionId + '/'
+        );
+        let TYPES = ["INIT", "MESSAGE","BIDDING", "CLOSE"]
+        let DATA_INFO = ["PLAYER","AUCTION"]
+        
+        socket.onmessage = function(e) {
+            const response = JSON.parse(e.data);
+
+            let li = document.createElement('li');
+            let data = "";
+            
+            if(response.type==TYPES[0]){
+                
+                console.log("Initing")
+                data = response.data.message
+
+            }else if(response.type == TYPES[1]){
+            
+                console.log("Message");
+                data = response.data.message
+                
+                if(response.data.method == DATA_INFO[2] ){
+                    console.log(response.data)
+                }
+
+                if (response.data.method == DATA_INFO[0]){
+                    let player = response.data
+                    console.log(player)
+                }
+                
+            }else if(response.type = TYPES[2]){
+            
+                console.log("Bidding")
+                data = response.data.message
+                console.log(response.data.player,response.data.price)
+            }
+            else{
+            
+                data = "CLOSING"
+            
+            }
+            li.innerHTML = data
+
+            document.getElementById("messages").appendChild(li);
+        };
+        socket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+    
+        socket.onerror = function(e) {
+            console.error('WebSocket error:', e);
+        };
+    
+        window.addEventListener('beforeunload', function() {
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.close();
+            }
+        });
+    </script>
+    
+
+</body>
+</html>

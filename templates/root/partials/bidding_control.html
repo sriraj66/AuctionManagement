@@ -11,6 +11,21 @@
                     id="player_id" class="form-control">
                 <button type="button" disabled class="btn btn-info"><i class="ri-play-line"></i>Statred</button>
             </form>
+            <br>
+
+            <button class="btn btn-outline-success w-100 " type="button"
+            hx-post="{% url 'show_player_info' auction.id current_bid.player.id %}"
+            hx-swap="innerHTML"
+            hx-target="#global_status"
+            ><i class="fa fa-eye text-success"></i> Show Player on Screen</button>
+
+
+            <button class="btn btn-outline-info mt-3 w-100 " type="button"
+            hx-post="{% url 'show_bidding_info' auction.id %}"
+            hx-swap="innerHTML"
+            hx-target="#global_status"
+            ><i class="fa fa-assistive-listening-systems text-info "></i> Show Bidding on Screen</button>
+
             {% else %}
             <form method="post" class="currentBidForm" hx-confirm="Are you sure?"
                 hx-post="{% url 'start_bid' auction.id %}" hx-swap="innerHTML" hx-target="#bidding_wraper"
@@ -26,10 +41,7 @@
 
             <br>
 
-            <form action="" method="post" class="currentBidForm">
-                <input type="number" name="uid" placeholder="Player ID" required id="" class="form-control">
-                <button type="submit" class="showTransition"><i class="ri-slideshow-3-line"></i>Show</button>
-            </form>
+            
         </div>
     </div>
 </div>
@@ -79,7 +91,7 @@
 
 
                     </div>
-                    <div class="col"><img src="{{player.player_logo}}" width="60%" alt="logo">
+                    <div class="col"><img src="{{player.player_image.url}}" width="60%" alt="logo">
                     </div>
                 </div>
                 <hr>
@@ -94,7 +106,7 @@
                         <div class="form-group col text-start">
                             <label for="sold_to">Sold to</label>
                             <select name="sold_to" id="sold_to" class="form-select">
-                                <option value="-1" defaukt>--- ---</option>
+                                <option value="-1" selected>Un Sold</option>
                                 {% for i in teams %}
                                 <option value="{{i.id}}">{{i.team_name}}</option>
                                 {% endfor %}
@@ -103,7 +115,8 @@
                     </div>
 
                     <div class="btn-group mt-3 w-100">
-                        <button type="submit" id="sellbtn" class="btn btn-success">Sell </button>
+                        <button type="button" id="sellbtn" class="btn btn-success">Sell </button>
+                        <button type="submit" hidden id="submit"> </button>
 
                         <button type="button" id="unsoldbtn" class="btn btn-danger">Unsold</button>
                     </div>
@@ -167,12 +180,15 @@
 
             document.getElementById("sellbtn").addEventListener("click", () => {
                 document.getElementById("sellbtn").innerHTML = `<i class="fa fa-spin"></i> Loading`
+                if (confirm("Are You Want to Sell this Player")) {
+                    document.getElementById("submit").click()
+                }
             })
 
             document.getElementById("unsoldbtn").addEventListener("click", () => {
                 document.getElementById("sold_to").value = -1;
                 if (confirm("Are You Want to Unsold this Player")) {
-                    document.getElementById("sellbtn").click()
+                    document.getElementById("submit").click()
                 }
             })
 
@@ -206,15 +222,29 @@
                 }
             }
 
-            let basePrice = parseFloat(document.getElementById("current_price").value) || 0;
+            const basePrice = parseFloat(document.getElementById("current_price").value) || 0;
             let price_list = []; // Stores the increments
 
             function updatePrice() {
-                let totalPrice = basePrice + price_list.reduce((acc, val) => acc + val, 0);
+                let totalPrice = basePrice
+                console.log("Base Price : ",totalPrice)
+                for(let price of price_list){
+                    totalPrice+=price
+                }
+                console.log(price_list)
+
                 document.getElementById("current_price").value = totalPrice;
-                // Send TO Clients
                 sendPriceUpdate();
             }
+
+            document.getElementById("current_price").addEventListener("keydown",(event)=>{
+                if (event.keyCode === 13) {
+                    // Send TO Clients
+                    event.preventDefault();
+                    
+                    sendPriceUpdate();
+                }
+            })
 
             document.getElementById("sequence_btn").addEventListener("click", () => {
                 price_list.push(1000);

@@ -3,6 +3,7 @@ from ..models import Auction,Team, Category, Player
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import success,error,warning
 import pandas as pd
+from django.urls import reverse
 
 TEMPLATE_ROOT = "root/"
 PARTIALS = TEMPLATE_ROOT+"partials/"
@@ -54,7 +55,8 @@ def manage_teams(request,auction_id):
         "auction" : auction,
         "teams" : Team.objects.filter(auction=auction),
         "categories": Category.objects.filter(auction=auction),
-        "players" : Player.objects.filter(auction=auction)
+        "players" : Player.objects.filter(auction=auction),
+        "share_url_player": request.build_absolute_uri(reverse("share_player_form",args=[auction_id,request.user.id]))
     }
     
     return render(request,TEMPLATE_ROOT+"manage_team.html",context)
@@ -126,6 +128,76 @@ def add_categories(request,auction_id):
         print(e)
     return HttpResponse("<p class='text-danger' >Invalid Request</p>")
 
+
+def share_player_form(request,auction_id,user_id):
+    auction = Auction.objects.get(id=auction_id)
+    try:
+        
+        if auction.user.id != user_id:
+            return HttpResponse("Form Invalid")
+        
+        if request.method == 'POST':
+            
+            player_name = request.POST.get("player_name")
+            player_category = request.POST.get("player_category")
+            player_image = request.FILES.get("player_image")
+            mpl_id = request.POST.get("mpl_id")
+            player_age = request.POST.get("player_age",0)
+            player_village = request.POST.get("player_village")
+            player_role = request.POST.get("player_role")
+            player_matches = request.POST.get("player_matches",0)
+            player_bat_matches = request.POST.get("player_bat_matches",0)
+            player_bowl_matches = request.POST.get("player_bowl_matches",0)
+            player_bat_runs = request.POST.get("player_bat_runs",0)
+            player_bowl_runs = request.POST.get("player_bowl_runs",0)
+            player_30s = request.POST.get("player_30s",0)
+            player_50s = request.POST.get("player_50s",0)
+            player_100s = request.POST.get("player_100s",0)
+            player_max = request.POST.get("player_max",0)
+            player_wickets = request.POST.get("player_wickets",0)
+            player_economy = request.POST.get("player_economy",0)
+            player_miden = request.POST.get("player_miden",0)
+            player_hattrick = request.POST.get("player_hattrick",0)
+            
+            obj = Player(
+                user = auction.user,
+                player_name = player_name,
+                player_category = Category.objects.get(id=player_category),
+                player_image = player_image,
+                mpl_id = mpl_id,
+                player_age = player_age,
+                player_village = player_village,
+                player_role = player_role,
+                player_matches = player_matches,
+                auction = auction,
+                player_bat_matches = player_bat_matches,
+                player_bat_runs = player_bat_runs,
+                player_30s = player_30s,
+                player_50s = player_50s,
+                player_100s = player_100s,
+                player_max = player_max,
+                player_wickets = player_wickets,
+                player_bowl_runs = player_bowl_runs,
+                player_economy = player_economy,
+                player_bowl_matches = player_bowl_matches,
+                player_miden = player_miden,
+                player_hattrick = player_hattrick
+            )
+            obj.save()
+            print("Player Added from the link")
+            
+            return render(request,PARTIALS+"form_success.html")
+            
+    except Exception as e:
+        print(e)
+    context = {
+        "auction": auction,
+        "categories": Category.objects.filter(auction=auction),
+        
+    }
+    return render(request,TEMPLATE_ROOT+"player_form.html",context)
+
+
 @login_required
 def create_player(request,auction_id):
     try:
@@ -133,7 +205,7 @@ def create_player(request,auction_id):
         if request.method == 'POST':
             player_name = request.POST.get("player_name")
             player_category = request.POST.get("player_category")
-            player_image = request.POST.get("player_image")
+            player_image = request.FILES.get("player_image")
             mpl_id = request.POST.get("mpl_id")
             player_age = request.POST.get("player_age",0)
             player_village = request.POST.get("player_village")
@@ -216,7 +288,7 @@ def edit_player(request,auction_id):
         if request.method == 'POST' and request.user == obj.user:
             player_name = request.POST.get("player_name")
             player_category = request.POST.get("player_category")
-            player_image = request.POST.get("player_image")
+            player_image = request.FILES.get("player_image")
             mpl_id = request.POST.get("mpl_id")
             player_age = request.POST.get("player_age", 0)
             player_village = request.POST.get("player_village")

@@ -22,6 +22,7 @@ urlpatterns = [
     path("player/u/<int:auction_id>",upload_from_exel,name="upload_from_exel"),
     path("player/d/<int:player_id>",delete_player,name="delete_player"),
     path("player/e<int:auction_id>/",edit_player,name="edit_player"),
+    path("player/sh/<int:auction_id>/<int:user_id>/form",share_player_form,name="share_player_form"),
     
     # Dashboard
     path("dash/<int:auction_id>",dashboard,name="dashboard"),
@@ -42,6 +43,7 @@ urlpatterns = [
 # Animation Endpoints
 ANIMATION_ENDPOINTS = [
     path("pannel/p/<int:auction_id>/<int:player_id>",show_player_info,name="show_player_info"),
-    path("pannel/a/<int:auction_id>",show_auction_info,name="show_auction_info")
+    path("pannel/a/<int:auction_id>",show_auction_info,name="show_auction_info"),
+    path("pannel/a/<int:auction_id>/bid",show_bidding_info,name="show_bidding_info"),
 ]
 urlpatterns+=ANIMATION_ENDPOINTS
