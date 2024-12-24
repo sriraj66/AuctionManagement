@@ -90,7 +90,8 @@ class Player(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name="Admin User")
     player_name = models.CharField(max_length=255,verbose_name="Player Name")
     player_category = models.ForeignKey(Category,on_delete=models.CASCADE)
-    player_image = models.URLField(verbose_name="Profile Image",default="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png")
+    # player_image = models.URLField(verbose_name="Profile Image",default="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png")
+    player_image = models.ImageField(verbose_name="Profile Image",default="file/default.png",upload_to="players/")
     mpl_id = models.CharField(unique=True,verbose_name="MPL ID",max_length=255,blank=True,null=True)
     player_age = models.PositiveIntegerField(verbose_name="Age")
     player_village = models.CharField(max_length=255,verbose_name="Village Name",blank=True)
@@ -169,28 +170,10 @@ class Bidding(models.Model):
     curent_price = models.PositiveIntegerField(verbose_name="Current Price")
     is_sold = models.BooleanField(default=False)
     
-    def getPriceTrack(self):
-        return self.price_track.split(":")
-    
-    def setPrice(self,price):
-        self.curent_price = price
-        track = self.getPriceTrack().append(str(price))
-        self.price_track = ":".join(track)
-        self.save()
-        
-    def undoPrice(self):
-        try:
-            price_track = self.getPriceTrack()
-            price_track.pop()
-            self.curent_price = int(price_track[-1])
-            self.price_track = ":".join(price_track)
-        except Exception as e:
-            print(e)
-            self.curent_price = self.player.player_category.base_price
-        finally:
-            self.save()
-    
-    def reset(self):
-        self.curent_price = self.player.player_category.base_price
-        self.save()
-    
+    def calculate_purse(self):
+        bids = Bidding.objects.filter(team=self.team,is_sold=True)
+        print(bids)
+        amt = 0
+        for i in bids:
+            amt+=i.curent_price
+        return amt

@@ -1,4 +1,5 @@
 {% extends '_.html' %}
+{% load static %}
 
 {% block title %}
 Manage Team
@@ -125,7 +126,7 @@ Manage Team
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="col-12" hx-swap="innerHTML" hx-target="#player_table_wraper"
+                <form class="col-12" hx-swap="innerHTML" hx-target="#player_table_wraper" enctype="multipart/form-data"
                     hx-on::after-request="this.reset()" hx-post="{% url 'create_player' auction.id %}">
                     {% csrf_token %}
 
@@ -149,7 +150,7 @@ Manage Team
                         <label for="player_image" class="form-label">Profile Image URL</label>
                         <div class="row">
                             <div class="col-10 col-lg-11">
-                                <input class="form-control" id="player_image" name="player_image" type="url"
+                                <input class="form-control" id="player_image" name="player_image" type="file" accept="image/*"
                                     placeholder="Image URL" required>
                             </div>
 
@@ -303,7 +304,7 @@ Manage Team
 
                     <!-- Submit and Reset Buttons -->
                     <div class="btn-group w-100">
-                        <button class="btn btn-success" type="submit">Add Player</button>
+                        <button class="btn btn-success" data-bs-dismiss="modal"  type="submit">Add Player</button>
                         <button class="btn btn-danger" data-bs-dismiss="modal" type="reset">Reset</button>
                     </div>
                 </form>
@@ -313,7 +314,7 @@ Manage Team
     </div>
 </div>
 
-<div class="modal fade" id="modalExelUpload" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div class="modal modal-lg fade" id="modalExelUpload" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -358,6 +359,31 @@ Manage Team
                             <button class="btn btn-primary" type="submit">Add Category</button>
                         </div>
                     </form>
+
+                    <hr>
+
+                    <label for="share_url" class="text-success">Share this URL to the Players</label>
+                    <div class="input-group mb-3">
+                        <input type="text" id="share_url" class="form-control" value="{{share_url_player}}" disabled>
+                        <button class="btn btn-success" type="button" id="copyButton">Copy</button>
+                    </div>
+                    
+                    <script>
+                      document.getElementById('copyButton').addEventListener('click', function() {
+                        
+                        var copyText = document.createElement("input");
+                        copyText.value = "{{share_url_player}}"
+                        copyText.select();
+                        copyText.setSelectionRange(0, 99999);
+                        navigator.clipboard.writeText(copyText.value);
+
+                        alert("URL Copied to Clipboard !");
+                      });
+
+                      </script>
+                
+
+
                     <hr>
                     <p>Upload Exel Sheet Player</p>
                     <form class="col-12" enctype="multipart/form-data" hx-swap="innerHTML"
@@ -413,7 +439,7 @@ Manage Team
                                     </ul>
                                     <p>Procudere</p>
                                     <ol class="text-success">
-                                        <li>Download the this <a target="_blank" href="https://docs.google.com/spreadsheets/d/1D2BQNkxbveGdV5XiW3ZfCiQcaPppRnBI/edit?usp=sharing&ouid=118326421948579264413&rtpof=true&sd=true">File</a> in .xlsx Format</li>
+                                        <li>Download the this <a target="_blank" href="{% static 'core/files/PlayerUploadFormat.xlsx' %}">File</a> in .xlsx Format</li>
                                         <li>Fill all the Fields no blank field shoud be present</li>
                                         <li>Fill the Player Category <code>By the ID mensioned in Category Table</code></li>
                                     </ol>
