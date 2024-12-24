@@ -3,12 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard</title>
+    <style>
+        /* nav*/
+        .nav{
+    background: #45a049;
+    height: 70px;
+
+}
+.nav-field{
+    display: flex;
+    justify-content: center;
+}
+.nav-field svg{
+    height: 50px;
+    width: 50px;
+    padding-top: 5px;
+   
+}
+.nav-field h1{
+    color: white;
+    padding: 4px 4px;
+}
+
+
+      .matchcreationbtn{
+       background: rgb(25, 187, 25);
+        border: 2px;
+        width: fit-content;
+        border-radius: 3px;
+        margin: 30px;
+      }
+      .matchcreationbtn a{
+        text-decoration: none;
+        color: white;
+      }
+      .matchcreationbtn h3{
+        padding: 6px;
+      }
+      .matchcreationbtn:hover{
+        background: rgb(46, 163, 46);
+      }
+
+      /* dashboard */
+      .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h2 {
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.match-cards {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.match-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.match-info {
+  flex-grow: 1;
+}
+
+.teams {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.match-details {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.match-status {
+  font-weight: 500;
+  color: #2563eb;
+  margin-top: 0.5rem;
+}
+
+.dashboard-btn {
+  background-color: #45a049;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.dashboard-btn:hover {
+  background-color: #1dc525;
+}
+    </style>
 </head>
 <body>
-    
+    <nav class="nav">
+    <div class="nav-field">
+        <svg fill="#ffffff" height="100px" width="100px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300.95 300.95" xml:space="preserve" stroke="#ffffff" stroke-width="6.620900000000001">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+            <g id="SVGRepo_iconCarrier"> <g> <g> <g> <circle cx="80.08" cy="70.257" r="4.875"/> <circle cx="166.27" cy="70.257" r="4.875"/> <path d="M166.66,97.491H80.08c-2.665,0-4.875,2.21-4.875,4.875v21.71c0,2.665,2.21,4.875,4.875,4.875h86.58 c2.665,0,4.875-2.145,4.875-4.875v-21.71C171.535,99.701,169.325,97.491,166.66,97.491z M161.785,119.201h-76.83v-11.96h76.83 V119.201z"/> <path d="M296.075,140.132h-49.4c-0.78-19.63-6.435-38.935-16.445-56.16c-10.725-18.525-26.26-34.125-44.915-45.24 c-0.065,0-0.065-0.065-0.13-0.065c-38.545-21.645-85.995-21.645-123.695,0c0,0-0.065,0-0.065,0.065 C42.77,49.847,27.3,65.512,16.51,83.972C5.72,102.627,0,123.687,0,145.007c0,2.665,2.21,4.875,4.875,4.875H75.27 c-0.065,0.26-0.065,0.52-0.065,0.78v16.055c0,0.52,0.065,1.04,0.26,1.495l10.53,32.175c0.13,0.455,0.325,0.845,0.585,1.235 l21.84,32.175c0.195,0.325,0.52,0.65,0.78,0.91l47.71,42.575c0.91,0.78,2.08,1.235,3.25,1.235h103.545 c1.885,0,3.575-1.04,4.355-2.73l21.06-42.575c0.715-1.495,0.65-3.315-0.26-4.745c-0.91-1.43-2.47-2.275-4.16-2.275H171.535 v-28.925l-11.31-31.395v-15.99h59.8h21.84h54.21c2.665,0,4.875-2.21,4.875-4.875C300.95,142.277,298.74,140.132,296.075,140.132z M84.955,161.841v-11.18c0-0.26,0-0.52-0.065-0.78h65.585v11.96H84.955z M86.775,171.591h65.13l8.125,22.425H94.12 L86.775,171.591z M161.785,268.507l-36.53-32.63h36.53V268.507z M257.27,235.876h19.63l-16.185,32.89h-3.445V235.876z M214.37,235.876h33.15v32.825h-33.15V235.876z M171.47,235.876h33.15v32.825h-33.15V235.876z M161.785,203.701v22.425H115.05 l-15.21-22.425H161.785z M220.025,140.131H9.88c1.69-37.7,23.01-72.995,56.55-93.015c34.775-19.955,78.455-19.955,114.01,0 c33.475,20.02,54.795,55.315,56.485,93.015H220.025z"/> </g> </g> </g> </g>
+            </svg>
+        <h1 cless="heading">Hatric Solutions</h1>
+    </div>
+</nav>
+    <div class="matchcreationbtn">
+   <a href="./matchcreation.html"><h3>Create Match Setup</h3></a>
+    </div>
 
-    <a href="{% url 'create_match' %}">Create Match</a>
-
+    <div class="container">
+        <h2>Recent Matches</h2>
+        <div class="match-cards">
+          <div class="match-card">
+            <div class="match-info">
+              <div class="teams">Mumbai Indians vs Chennai Super Kings</div>
+              <div class="match-details">
+                Wankhede Stadium, Mumbai<br>
+                April 14, 2024 - 7:30 PM IST
+              </div>
+              <div class="match-status">CSK won by 6 wickets</div>
+            </div>
+            <button class="dashboard-btn">Go to Dashboard</button>
+          </div>
+  
+          <div class="match-card">
+            <div class="match-info">
+              <div class="teams">Royal Challengers Bangalore vs Rajasthan Royals</div>
+              <div class="match-details">
+                M.Chinnaswamy Stadium, Bangalore<br>
+                April 13, 2024 - 3:30 PM IST
+              </div>
+              <div class="match-status">RCB won by 4 wickets</div>
+            </div>
+            <button class="dashboard-btn">Go to Dashboard</button>
+          </div>
+  
+          <div class="match-card">
+            <div class="match-info">
+              <div class="teams">Delhi Capitals vs Kolkata Knight Riders</div>
+              <div class="match-details">
+                Arun Jaitley Stadium, Delhi<br>
+                April 12, 2024 - 7:30 PM IST
+              </div>
+              <div class="match-status">KKR won by 7 wickets</div>
+            </div>
+            <button class="dashboard-btn">Go to Dashboard</button>
+          </div>
+  
+          <div class="match-card">
+            <div class="match-info">
+              <div class="teams">Gujarat Titans vs Punjab Kings</div>
+              <div class="match-details">
+                Narendra Modi Stadium, Ahmedabad<br>
+                April 11, 2024 - 7:30 PM IST
+              </div>
+              <div class="match-status">GT won by 3 runs</div>
+            </div>
+            <button class="dashboard-btn">Go to Dashboard</button>
+          </div>
+        </div>
+      </div>
 </body>
 </html>
