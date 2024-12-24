@@ -27,7 +27,7 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "8000:80"  # Expose only Nginx to the host
+      - "80:80"
     networks:
       - internal_network
     volumes:
