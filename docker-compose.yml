@@ -27,7 +27,7 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80"
+      - "8000:80"
     networks:
       - internal_network
     volumes:
@@ -46,10 +46,12 @@ services:
 
       volumes:
         - pg_volume:/var/lib/postgresql/data # Mounted for persistent storage
+      
       environment:
-        - "POSTGRES_USER: ${POSTGRES_USER}"
-        - "POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}"
-        - "POSTGRES_DB: ${POSTGRES_DB}"
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_DB: ${POSTGRES_DB}
+
       ports:
         - "5432:5432"
 
