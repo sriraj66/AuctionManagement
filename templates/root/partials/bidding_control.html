@@ -27,12 +27,27 @@
             ><i class="fa fa-assistive-listening-systems text-info "></i> Show Bidding on Screen</button>
 
             {% else %}
+            <style>
+                .select2{
+                    border: 1px solid #00000052;
+                    border-radius: 3px;
+                    padding: 3px 2px 3px 2px;
+                    text-align: start;
+                    background-color: aliceblue;
+                }
+            </style>
             <form method="post" class="currentBidForm" hx-confirm="Are you sure?"
                 hx-post="{% url 'start_bid' auction.id %}" hx-swap="innerHTML" hx-target="#bidding_wraper"
                 hx-on::after-request="this.reset()">
                 {% csrf_token %}
-                <input type="number" name="player_id" placeholder="Player ID" required id="player_id"
-                    class="form-control">
+                <select id="player_select" required name="player_id" class="form-control">
+                    {% for i in players %}
+                        <option value="{{i.id}}">{{i.player_name}}</option>
+                    {% endfor %}
+                  </select>  
+
+                <!-- <input type="number" name="player_id" placeholder="Player ID" required id="player_id"
+                    class="form-control"> -->
                 <button type="submit" class="btn btn-info"><i class="ri-play-line"></i>Start</button>
             </form>
 
@@ -91,7 +106,7 @@
 
 
                     </div>
-                    <div class="col"><img src="{{player.player_image.url}}" width="60%" alt="logo">
+                    <div class="col"><img src="{{player.player_image.url}}" width="60%" style="max-height: 500px;" alt="logo">
                     </div>
                 </div>
                 <hr>

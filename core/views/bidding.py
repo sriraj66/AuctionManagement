@@ -19,15 +19,33 @@ def start_bid(request,auction_id):
             if player.bidding():
                 print(player.bidding())
                 if player.bidding().is_sold == True:
-                    return HttpResponse("Player Already Sold")
+                    player.bidding().delete()
+                    
+                    obj = Bidding(
+                    user = request.user,
+                    auction = auction,
+                    player = player,
+                    curent_price = player.player_category.base_price)
+                    obj.save()
+                    
+                else:
+                    print("Reusing the bid")
+                    obj = player.bidding()
+                    obj.curent_price = player.player_category.base_price
+                    obj.team = None
+                    
+                    obj.save()
+            
+            else:                
+                obj = Bidding(
+                    user = request.user,
+                    auction = auction,
+                    player = player,
+                    curent_price = player.player_category.base_price
+                )
+                obj.save()
+            
                 
-            obj = Bidding(
-                user = request.user,
-                auction = auction,
-                player = player,
-                curent_price = player.player_category.base_price
-            )
-            obj.save()
             print("Bidding Started")
             
             auction.current_bid_id = obj.id
@@ -36,6 +54,7 @@ def start_bid(request,auction_id):
                 "current_bid" : obj,
                 "auction": auction,
                 "player": player,
+                "players" : Player.objects.filter(auction=auction),
                 "teams" : Team.objects.filter(auction=auction)
             })
         else:
@@ -85,13 +104,6 @@ def sell_player(request,bidding_id):
             bidding.auction.save()
             bidding.player.save()
             bidding.save()
-            
-            
-            if(bidding.team):
-                bidding.team.used_amount = bidding.calculate_purse()
-                print("Amount  : ",bidding.team.used_amount)
-                bidding.team.max_bid = max(bidding.team.max_bid,int(current_price))
-                bidding.team.save()
                 
             
             #Show Bidding on the panel

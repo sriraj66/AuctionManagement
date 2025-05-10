@@ -8,4 +8,12 @@ sudo apt install docker-ce docker-ce-cli containerd.io
 
 docker --version
 
+
+# Create the docker group if it doesn't exist
+sudo groupadd docker
+
+# Add your user to the docker group
 sudo usermod -aG docker $USER
+
+# Apply group changes (you may need to log out and log back in)
+newgrp docker

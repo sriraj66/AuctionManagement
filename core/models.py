@@ -79,8 +79,15 @@ class Team(models.Model):
     def player_count(self):
         return Player.objects.filter(auction = self.auction,player_team=self.id).count()
     
+    def bidded_amount(self):
+        amt = 0
+        for i in Bidding.objects.filter(team=self.id,auction=self.auction,is_sold=True):
+            amt += i.curent_price
+        self.used_amount = amt
+        return self.used_amount
     def balance(self):
-        return self.purse - self.used_amount
+        return self.purse - self.bidded_amount()
+    
     
     def __str__(self) -> str:
         return self.team_name
@@ -170,10 +177,3 @@ class Bidding(models.Model):
     curent_price = models.PositiveIntegerField(verbose_name="Current Price")
     is_sold = models.BooleanField(default=False)
     
-    def calculate_purse(self):
-        bids = Bidding.objects.filter(team=self.team,is_sold=True)
-        print(bids)
-        amt = 0
-        for i in bids:
-            amt+=i.curent_price
-        return amt
